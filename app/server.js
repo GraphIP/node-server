@@ -21,27 +21,48 @@ const app = express();
 app.set('trust proxy', true);
 app.disable('x-powered-by');
 
+const hackReq = (fn) => (req, res, next) => {
+  if (req.method === 'GET') {
+    req.method = 'POST';
+    const payload = {
+      query: req.query.query,
+      operationName: req.query.operationName,
+      variables: req.query.variables,
+    };
+    const originalBody = req.body;
+    req.body = payload;
+    fn(req, res, (err) => {
+      req.body = originalBody;
+      req.method = 'GET';
+      next(err);
+    });
+  } else {
+    fn(req, res, next);
+  }
+}
+
 app.use('/graphql', (req, res, next) => {
   console.log(`${chalk.blue('client-ip:')} ${req.ip}, ${chalk.blue('user-agent:')} ${req.headers['user-agent']}`);
   next();
 });
 
-app.use(
-  postgraphile(
-    DATABASE_URL,
-    DATABASE_SCHEMA,
-    {
-      graphqlRoute: GRAPHQL_ENDPOINT,
-      graphiqlRoute: GRAPHIQL_ENDPOINT,
-      jwtSecret: JWT_SECRET,
-      ignoreRBAC: false,
-      ignoreIndexes: false,
-      //graphiql: true,
-      //enhanceGraphiql: true,
-      pgSettings: async req => ({
-        'client.ip': `${req.ip}`
-      }),
-    }
+app.use(hackReq( // Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
+    postgraphile(
+      DATABASE_URL,
+      DATABASE_SCHEMA,
+      {
+        graphqlRoute: GRAPHQL_ENDPOINT,
+        graphiqlRoute: GRAPHIQL_ENDPOINT,
+        jwtSecret: JWT_SECRET,
+        ignoreRBAC: false,
+        ignoreIndexes: false,
+        //graphiql: true,
+        //enhanceGraphiql: true,
+        pgSettings: async req => ({
+          'client.ip': `${req.ip}`
+        }),
+      }
+    )
   )
 );
 

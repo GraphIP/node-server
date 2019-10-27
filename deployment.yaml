@@ -17,7 +17,7 @@ spec:
         - name: gitlab-private-registry
       containers:
       - name: graphip
-        image: registry.gitlab.com/graphip/node-server:0.0.2-node
+        image: registry.gitlab.com/graphip/node-server:0.0.3-node
         ports:
         - containerPort: 3000
         envFrom:
