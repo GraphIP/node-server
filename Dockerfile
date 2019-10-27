@@ -11,9 +11,12 @@ WORKDIR /var/www/app
 ADD app/package.json ./
 RUN npm i --production
 
+# Install pm2 *globally* so we can run our application
+RUN npm i -g pm2
+
 # Add application files
 ADD app /var/www/app
 
 EXPOSE 3000
 
-CMD ["start", "process.json", "--no-daemon"]
+CMD ["pm2", "start", "process.json", "--no-daemon"]
