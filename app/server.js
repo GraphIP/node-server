@@ -21,6 +21,7 @@ const app = express();
 app.set('trust proxy', true);
 app.disable('x-powered-by');
 
+// Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
 const hackReq = (fn) => (req, res, next) => {
   if (req.method === 'GET') {
     req.method = 'POST';
@@ -46,7 +47,7 @@ app.use('/graphql', (req, res, next) => {
   next();
 });
 
-app.use(hackReq( // Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
+app.use(hackReq( // Accept GET requests hack
     postgraphile(
       DATABASE_URL,
       DATABASE_SCHEMA,
@@ -58,6 +59,7 @@ app.use(hackReq( // Accept GET requests hack - https://github.com/graphile/postg
         ignoreIndexes: false,
         //graphiql: true,
         //enhanceGraphiql: true,
+        retryOnInitFail: true,
         pgSettings: async req => ({
           'client.ip': `${req.ip}`
         }),

@@ -1,6 +1,6 @@
 {
   "name": "graphip-node-server",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "GraphIP App (PostGraphile with Express)",
   "main": "server.js",
   "scripts": {
