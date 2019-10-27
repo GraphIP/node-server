@@ -1,0 +1,18 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+- build
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - version=$(cat version)
+    - echo $version
+    - docker build --pull -t $CI_REGISTRY_IMAGE:$version .
+    - docker push $CI_REGISTRY_IMAGE:$version

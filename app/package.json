@@ -1,0 +1,16 @@
+{
+  "name": "graphip-node-server",
+  "version": "0.0.1",
+  "description": "GraphIP App (PostGraphile with Express)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Colin Wilson",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "postgraphile": "^4.4.4"
+  }
+}
