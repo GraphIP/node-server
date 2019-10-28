@@ -1,4 +1,5 @@
 require("dotenv").config();
+const compression = require('compression')
 const express = require("express");
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
@@ -18,8 +19,13 @@ const {
 const defaultPort = 3000;
 
 const app = express();
+// compress all responses
+app.use(compression())
+// Proxy Client IP Address
 app.set('trust proxy', true);
+// Disable powered by Express
 app.disable('x-powered-by');
+// Artifical HealthCheck for GKE ingress deployment [WIP]
 app.get('/health', (req, res) => res.end('OK'));
 
 // Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
