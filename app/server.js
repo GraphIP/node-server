@@ -76,7 +76,6 @@ app.use(hackReq( // Accept GET requests hack
 );
 
 app.listen(PORT || defaultPort, () => {
-  lightship.signalReady();
   const versionString = `v${manifest.version}`;
   console.log('');
   console.log(`GraphIP ${chalk.blue(versionString)} listening on port ${chalk.blue(PORT || defaultPort)} 🚀`);
@@ -86,4 +85,5 @@ app.listen(PORT || defaultPort, () => {
   console.log('');
   console.log(chalk.default.gray('* * *'));
   console.log('');
+  lightship.signalReady();
 });
