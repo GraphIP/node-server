@@ -17,7 +17,10 @@ spec:
         - name: gitlab-private-registry
       containers:
       - name: graphip
-        image: registry.gitlab.com/graphip/node-server:0.0.5-node
+        image: registry.gitlab.com/graphip/node-server:v0.0.7-node
+        readinessProbe:
+          httpGet:
+            path: /health
         ports:
         - containerPort: 3000
         envFrom:
@@ -25,3 +28,21 @@ spec:
             name: graphip-config
         - secretRef:
             name: graphip-secret
+      - image: postgres:11.5
+        imagePullPolicy: "IfNotPresent"
+        name: postgres
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgredb
+      # [END proxy_container]
+      # [START volumes]
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+      # [END volumes]
