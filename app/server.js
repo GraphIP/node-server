@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const { createLightship } = require("lightship");
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
 const chalk = require("chalk");
@@ -42,6 +43,11 @@ const hackReq = (fn) => (req, res, next) => {
   }
 }
 
+// Lightship will start a HTTP service on port 9000.
+const lightship = createLightship({
+  port: 9000,
+});
+
 app.use('/graphql', (req, res, next) => {
   console.log(`${chalk.blue('client-ip:')} ${req.ip}, ${chalk.blue('user-agent:')} ${req.headers['user-agent']}`);
   next();
@@ -69,6 +75,7 @@ app.use(hackReq( // Accept GET requests hack
 );
 
 app.listen(PORT || defaultPort, () => {
+  lightship.signalReady();
   const versionString = `v${manifest.version}`;
   console.log('');
   console.log(`GraphIP ${chalk.blue(versionString)} listening on port ${chalk.blue(PORT || defaultPort)} 🚀`);
