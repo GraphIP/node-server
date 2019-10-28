@@ -45,6 +45,7 @@ const hackReq = (fn) => (req, res, next) => {
 
 // Lightship will start a HTTP service on port 9000.
 const lightship = createLightship({
+  detectKubernetes: false,
   port: 9000,
 });
 
