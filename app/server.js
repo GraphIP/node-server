@@ -10,7 +10,6 @@ const {
   DATABASE_SCHEMA,
   GRAPHQL_ENDPOINT,
   GRAPHIQL_ENDPOINT,
-  JWT_SECRET,
   LOG_LEVEL,
   NODE_ENV
 } = process.env;
@@ -58,8 +57,6 @@ app.use(hackReq( // Accept GET requests hack (may not work if other proxies are 
       {
         graphqlRoute: GRAPHQL_ENDPOINT,
         graphiqlRoute: GRAPHIQL_ENDPOINT,
-        jwtSecret: JWT_SECRET,
-        jwtPgTypeIdentifier: JW_PG_TYPE_IDENTIFIER,
         ignoreRBAC: false,
         ignoreIndexes: false,
         //graphiql: true,
