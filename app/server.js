@@ -1,5 +1,4 @@
 require("dotenv").config();
-const compression = require('compression')
 const express = require("express");
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
@@ -19,13 +18,11 @@ const {
 const defaultPort = 3000;
 
 const app = express();
-// compress all responses
-app.use(compression())
 // Proxy Client IP Address
 app.set('trust proxy', true);
 // Disable powered by Express
 app.disable('x-powered-by');
-// Artifical HealthCheck for GKE ingress deployment [WIP]
+// Artifical HealthCheck path for GKE ingress deployment [WIP]
 app.get('/health', (req, res) => res.end('OK'));
 
 // Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
@@ -54,7 +51,7 @@ app.use('/graphql', (req, res, next) => {
   next();
 });
 
-app.use(hackReq( // Accept GET requests hack
+app.use(hackReq( // Accept GET requests hack (may not work if other proxies are configured to refuse malformed GET requests)
     postgraphile(
       DATABASE_URL,
       DATABASE_SCHEMA,
@@ -62,6 +59,7 @@ app.use(hackReq( // Accept GET requests hack
         graphqlRoute: GRAPHQL_ENDPOINT,
         graphiqlRoute: GRAPHIQL_ENDPOINT,
         jwtSecret: JWT_SECRET,
+        jwtPgTypeIdentifier: JW_PG_TYPE_IDENTIFIER,
         ignoreRBAC: false,
         ignoreIndexes: false,
         //graphiql: true,
