@@ -91,7 +91,7 @@ app.use(hackReq( // Accept GET requests hack (may not work if other proxies are 
   )
 );
 
-app.listen(PORT || defaultPort, () => {
+const server = app.listen(PORT || defaultPort, () => {
   const versionString = `v${manifest.version}`;
   console.log('');
   console.log(`GraphIP ${chalk.blue(versionString)} listening on port ${chalk.blue(PORT || defaultPort)} 🚀`);
@@ -102,3 +102,6 @@ app.listen(PORT || defaultPort, () => {
   console.log(chalk.default.gray('* * *'));
   console.log('');
 });
+
+server.keepAliveTimeout = 61 * 1000;
+server.headersTimeout = 65 * 1000;
