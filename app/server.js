@@ -1,6 +1,7 @@
 require("dotenv").config();
 const compression = require('compression');
 const express = require("express");
+const cors = require('cors');
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
 const chalk = require("chalk");
@@ -18,6 +19,8 @@ const {
 const defaultPort = 3000;
 
 const app = express();
+
+app.use(cors());
 
 const shouldCompress = (req, res) => {
   if (req.headers['x-no-compression']) {
