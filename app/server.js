@@ -45,8 +45,12 @@ app.use(compression({
 app.set('trust proxy', true);
 // Disable powered by Express
 app.disable('x-powered-by');
-// Artifical HealthCheck path for GKE ingress deployment [WIP]
-app.get('/health', (req, res) => res.end('OK'));
+// HealthCheck path for GKE ingress deployment
+app.use('/health', require('express-healthcheck')({
+  healthy: function () {
+      return { status: "OK", uptime: process.uptime() };
+  }
+}));
 
 // Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
 const hackReq = (fn) => (req, res, next) => {
