@@ -1,4 +1,4 @@
-# Deploy a simple GraphQL Server using Node.js, Express & Postgraphile on Kubernetes (GKE)
+# Simple GraphQL middleware built with Express & Postgraphile (deploy on Kubernetes)
 
 ![](graphip_logo.png)
 
@@ -20,4 +20,4 @@ npm run start
 
 ## App
 
-The app built with Node.js, Express & Postgraphile
+The app is built with Node.js, Express & Postgraphile

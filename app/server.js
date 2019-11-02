@@ -5,6 +5,7 @@ const cors = require('cors');
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
 const chalk = require("chalk");
+const os = require("os");
 
 const {
   PORT,
@@ -45,10 +46,12 @@ app.use(compression({
 app.set('trust proxy', true);
 // Disable powered by Express
 app.disable('x-powered-by');
+
 // HealthCheck path for GKE ingress deployment
+const hostname = os.hostname();
 app.use('/health', require('express-healthcheck')({
   healthy: function () {
-      return { status: "OK", uptime: process.uptime() };
+      return { status: "OK", uptime: process.uptime(), host: hostname };
   }
 }));
 
