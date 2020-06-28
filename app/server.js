@@ -1,7 +1,6 @@
 require("dotenv").config();
 const compression = require('compression');
 const express = require("express");
-const admin = require("./firebase-admin/admin");
 const cors = require('cors');
 const { postgraphile } = require("postgraphile");
 const manifest = require("../app/package.json");
@@ -17,36 +16,6 @@ const {
   LOG_LEVEL,
   NODE_ENV
 } = process.env;
-
-const getAuthToken = (req, res, next) => {
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.split(' ')[0] === 'Bearer'
-  ) {
-    req.authToken = req.headers.authorization.split(' ')[1];
-  } else {
-    req.authToken = null;
-  }
-  next();
-};
-
-
-const checkIfAuthenticated = (req, res, next) => {
- getAuthToken(req, res, async () => {
-    try {
-      const { authToken } = req;
-      const userInfo = await admin
-        .auth()
-        .verifyIdToken(authToken);
-      req.authId = userInfo.uid;
-      return next();
-    } catch (e) {
-      return res
-        .status(401)
-        .send({ error: 'You are not authorised to use the GraphIP API' });
-    }
-  });
-};
 
 const defaultPort = 3000;
 
@@ -107,7 +76,7 @@ const hackReq = (fn) => (req, res, next) => {
   }
 }
 
-app.use('/graphql', checkIfAuthenticated, (req, res, next) => {
+app.use('/graphql', (req, res, next) => {
   console.log(`${chalk.blue('client-ip:')} ${req.ip}, ${chalk.blue('user-agent:')} ${req.headers['user-agent']}`);
   console.log(`${req}`);
   next();
@@ -122,6 +91,7 @@ app.use(hackReq( // Accept GET requests hack (may not work if other proxies are 
         graphiqlRoute: GRAPHIQL_ENDPOINT,
         ignoreRBAC: false,
         ignoreIndexes: false,
+        simpleCollections: "only",
         //graphiql: true,
         //enhanceGraphiql: true,
         retryOnInitFail: true,

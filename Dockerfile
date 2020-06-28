@@ -1,6 +1,6 @@
 FROM node:lts-stretch
 
-LABEL maintainer="Colin Wilson (colin@aig.is)"
+LABEL maintainer="Colin Wilson (colin@aigis.uk)"
 LABEL vendor="AIGIS Services Ltd"
 
 # Set the work directory

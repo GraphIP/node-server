@@ -1,6 +1,6 @@
 {
   "name": "graphip-node-server",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "GraphIP App (PostGraphile with Express)",
   "main": "server.js",
   "scripts": {
@@ -14,7 +14,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
-    "firebase-admin": "^8.7.0",
-    "postgraphile": "^4.4.4"
+    "postgraphile": "^4.7.*"
   }
 }
