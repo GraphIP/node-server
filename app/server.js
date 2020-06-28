@@ -3,6 +3,7 @@ const compression = require('compression');
 const express = require("express");
 const cors = require('cors');
 const { postgraphile } = require("postgraphile");
+const PgSimplifyInflectorPlugin = require("@graphile-contrib/pg-simplify-inflector");
 const manifest = require("../app/package.json");
 const chalk = require("chalk");
 const os = require("os");
@@ -55,38 +56,21 @@ app.use('/health', require('express-healthcheck')({
   }
 }));
 
-// Accept GET requests hack - https://github.com/graphile/postgraphile/issues/442
-const hackReq = (fn) => (req, res, next) => {
-  if (req.method === 'GET') {
-    req.method = 'POST';
-    const payload = {
-      query: req.query.query,
-      operationName: req.query.operationName,
-      variables: req.query.variables,
-    };
-    const originalBody = req.body;
-    req.body = payload;
-    fn(req, res, (err) => {
-      req.body = originalBody;
-      req.method = 'GET';
-      next(err);
-    });
-  } else {
-    fn(req, res, next);
-  }
-}
-
 app.use('/graphql', (req, res, next) => {
   console.log(`${chalk.blue('client-ip:')} ${req.ip}, ${chalk.blue('user-agent:')} ${req.headers['user-agent']}`);
   console.log(`${req}`);
   next();
 });
 
-app.use(hackReq( // Accept GET requests hack (may not work if other proxies are configured to refuse malformed GET requests)
+app.use(
     postgraphile(
       DATABASE_URL,
       DATABASE_SCHEMA,
       {
+        appendPlugins: [PgSimplifyInflectorPlugin],
+        graphileBuildOptions: {
+          pgOmitListSuffix: true, // lose the 'List' suffix
+        },
         graphqlRoute: GRAPHQL_ENDPOINT,
         graphiqlRoute: GRAPHIQL_ENDPOINT,
         ignoreRBAC: false,
@@ -100,8 +84,7 @@ app.use(hackReq( // Accept GET requests hack (may not work if other proxies are 
         }),
       }
     )
-  )
-);
+  );
 
 const server = app.listen(PORT || defaultPort, () => {
   const versionString = `v${manifest.version}`;

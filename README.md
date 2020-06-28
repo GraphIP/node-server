@@ -2,7 +2,7 @@
 
 ![](graphip_logo.png)
 
-## Deploy on Kubernetes (GKE)
+## Deploy on Kubernetes
 
 
 TBC

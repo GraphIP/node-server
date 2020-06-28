@@ -17,7 +17,7 @@ spec:
         - name: gitlab-private-registry
       containers:
       - name: graphip
-        image: registry.gitlab.com/graphip/node-server:v0.0.7-node
+        image: registry.gitlab.com/graphip/node-server:v0.1.7-node
         readinessProbe:
           httpGet:
             path: /health
@@ -28,7 +28,7 @@ spec:
             name: graphip-config
         - secretRef:
             name: graphip-secret
-      - image: postgres:11.5
+      - image: postgres:12
         imagePullPolicy: "IfNotPresent"
         name: postgres
         envFrom:
