@@ -1,7 +1,11 @@
 {
   "name": "graphip-node-server",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "GraphIP App (PostGraphile with Express)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:GraphIP/node-server.git"
+  },
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,12 +13,12 @@
   "author": "Colin Wilson",
   "license": "MIT",
   "dependencies": {
-    "@graphile-contrib/pg-simplify-inflector": "^6.0.0",
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
-    "postgraphile": "^4.7.*"
+    "postgraphile": "^4.10.*"
   }
 }

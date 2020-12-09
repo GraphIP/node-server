@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require('cors');
 const { postgraphile } = require("postgraphile");
 const PgSimplifyInflectorPlugin = require("@graphile-contrib/pg-simplify-inflector");
-const { NodePlugin } = require("graphile-build");
+const { NodePlugin, MutationPlugin, MutationPayloadQueryPlugin } = require("graphile-build");
 const manifest = require("../app/package.json");
 const chalk = require("chalk");
 const os = require("os");
@@ -68,8 +68,6 @@ app.use(
       DATABASE_URL,
       DATABASE_SCHEMA,
       {
-        appendPlugins: [PgSimplifyInflectorPlugin],
-        skipPlugins: [NodePlugin],
         graphileBuildOptions: {
           pgOmitListSuffix: true, // lose the 'List' suffix
         },
@@ -78,9 +76,12 @@ app.use(
         ignoreRBAC: false,
         ignoreIndexes: false,
         simpleCollections: "only",
+        disableQueryLog: true,
         //graphiql: true,
         //enhanceGraphiql: true,
         retryOnInitFail: true,
+        appendPlugins: [PgSimplifyInflectorPlugin],
+        skipPlugins: [NodePlugin, MutationPlugin, MutationPayloadQueryPlugin],
         pgSettings: async req => ({
           'client.ip': `${req.ip}`
         }),
