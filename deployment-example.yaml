@@ -17,7 +17,7 @@ spec:
         - name: gitlab-private-registry
       containers:
       - name: graphip
-        image: registry.gitlab.com/graphip/node-server:v0.1.7-node
+        image: registry.gitlab.com/graphip/node-server:v0.2.0
         readinessProbe:
           httpGet:
             path: /health

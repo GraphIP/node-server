@@ -1,6 +1,6 @@
 {
   "name": "graphip-node-server",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "GraphIP App (PostGraphile with Express)",
   "repository": {
     "type": "git",
@@ -19,6 +19,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
-    "postgraphile": "^4.10.*"
+    "postgraphile": "^4.11.*"
   }
 }

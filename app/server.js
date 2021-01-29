@@ -57,9 +57,12 @@ app.use('/health', require('express-healthcheck')({
   }
 }));
 
+app.use(express.json());
+
 app.use('/graphql', (req, res, next) => {
   console.log(`${chalk.blue('client-ip:')} ${req.ip}, ${chalk.blue('user-agent:')} ${req.headers['user-agent']}`);
-  console.log(`${req}`);
+  //console.log(req.body.query);
+  console.log(JSON.stringify(req.body.query));
   next();
 });
 
